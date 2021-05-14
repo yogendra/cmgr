@@ -1,15 +1,26 @@
 {
   "name": "cmgr",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Campaign Manager",
+  "type": "module",
+  "main": "cmgr.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js example/campaign-1"
+    "start": "node index.js example/campaign"
 
   },
+  "bin":{
+      "cmgr": "./bin/cmgr.js",
+      "init": "./bin/init.js"
+  },
+  "files": [
+      "bin/**",
+      "lib/**",
+      "index.js"
+  ],
+  "repository": "github:yogendra/cmgr",
   "keywords": [],
-  "author": "",
+  "author": "Yogi Rampuria (@yogendra)",
   "license": "ISC",
   "dependencies": {
     "csv-parser": "^3.0.0",
