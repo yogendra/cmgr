@@ -8,7 +8,7 @@ import {
 import { default as csv } from "csv-parser";
 import pkg from "whatsapp-web.js";
 const { MessageMedia } = pkg;
-import { waclient } from "./waclient.js";
+import { waclient } from "./lib/waclient.js";
 import { join } from "path";
 
 /**
@@ -17,14 +17,15 @@ import { join } from "path";
  */
 export function runFolder(folder) {
   console.debug("Run Folder: %s", folder);
-  if (isValidCampaignFolder(folder)) {
-    console.debug("Folder: %s - exists", folder);
+  if (isValidCampaignFolder(folder)) {    
     Promise.all([      
       readContacts(folder + "/contacts.csv"),
       readMessagesFromFolder(folder + "/messages/"),
     ]).then(([contacts, messages]) => {
       run(contacts, messages);
     });
+  }else{
+    console.error(`${folder}: invalid folder`);
   }
 }
 
@@ -36,9 +37,19 @@ export function runFolder(folder) {
 export async function run(contacts, messages) {
   for (let i = 0; i < contacts.length; i++) {
     await runForContact(contacts[i], messages);
+    if (i % 5 == 0){
+      sleep(0.5);
+    }
+
   }
   waclient.destroy();
 }
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}  
 /**
  *
  * @param {*} contact
@@ -103,7 +114,8 @@ function isTextMessage(message) {
   return message.text || /\.(txt)$/.test(message.path);
 }
 function isValidCampaignFolder(folder) {
-  let valid = lstatSync(folder).isDirectory();
+  let valid = existsSync(folder);
+  valid = valid && lstatSync(folder).isDirectory();
   valid = valid && existsSync(folder + "/contacts.csv");
   valid = valid && existsSync(folder + "/messages");
   valid = valid && lstatSync(folder + "/messages").isDirectory();
