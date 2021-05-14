@@ -1,0 +1,8 @@
+Greetings
+*Bold*
+_Italic_
+~Strikethrough~
+```
+Fixed width text
+```
+More info : https://faq.whatsapp.com/general/chats/how-to-format-your-messages/?lang=en
