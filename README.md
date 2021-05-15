@@ -9,7 +9,17 @@ Ones you have setup [pre-requisites](#prerequisites),  just run following on ter
 ```bash
 npx github:yogendra/cmgr
 ```
-You will be asked for 
+
+You will be asked for installing package (as below). confirm by typing `y`
+
+```bash
+Need to install the following packages:
+  github:yogendra/cmgr
+Ok to proceed? (y)
+```
+
+It can take upto 30 min first time to download all the packages, but subsequently it should be faster.
+
 ## Prerequisite
 
 1. Install [NodeJS 16.1+](https://nodejs.org/en/download/)
