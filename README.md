@@ -10,7 +10,7 @@ Ones you have setup [pre-requisites](#prerequisites),  just run following on ter
 npx github:yogendra/cmgr
 ```
 
-You will be asked for installing package (as below). confirm by typing `y`
+You may be asked for installing package (as below). confirm by typing `y`
 
 ```bash
 Need to install the following packages:
@@ -19,6 +19,44 @@ Ok to proceed? (y)
 ```
 
 It can take upto 30 min first time to download all the packages, but subsequently it should be faster.
+
+If this is the first time you are running this, you will be shown a QR code. 
+On you **Mobile Device (Phone/Tablet)** 
+
+- Go to **Whatsapp > Setting > WhatsApp Web**
+- Click on **LINK A DEVICE**
+- And then scan the QR code shown on screen.
+
+This will connect this app to your whatsapp account
+
+```bash
+2021-05-15 17:11:29.654 [info] : Folder:./campaign - Campaign Start 
+2021-05-15 17:11:29.665 [info] : Finished loading  1 contacts from campaign/contacts.csv 
+█ ▄▄▄▄▄ █▀█▀▀▄▀█▀█▄▀▀▀█▄▀▀▄█▄▄▄ ▀▄▀█▀▄█ ▄▄▄▄▄ █
+█ █   █ █▀ ▄▀█ ▄█▀  ▀▄ ▀ ▀▀█▀▄▀▄ █▄█ ▀█ █   █ █
+█ █▄▄▄█ █▀▄▀▀█▀▀▄█▀▀▄ ▄▄▄ ▄▀▀ ▄ ▄█▄▄▄▄█ █▄▄▄█ █
+█▄▄▄▄▄▄▄█▄▀ █ ▀▄█▄▀▄▀ █▄█ █ █ ▀▄▀ ▀ █▄█▄▄▄▄▄▄▄█
+█▄▄▄▄ █▄  ▄█▀▀█▀▀▄  ▄▄   ▄ █ ▀  █▀ ▄ ▀ █ ▀ █▄██
+██▀ ▀█ ▄█▄▀▄▀▀ ▄▀▀▀▄▀█▄██ █▄▀   ▀▄▀ ▀ ▀▄██▄  ██
+█ ▄▄▀▄ ▄▀ ▀▄█  ██▄▄ ▄ █ █▀ ▄▄█▀▀ █▄▄▀ ▀███▄█▀ █
+█▀ ▄██ ▄▄ ▄ ▀▀  ▄▀██▀█▄█▄▄ █ ▄▄ ▀▄▀▄▄ ▄  ▄▀▀▀▀█
+█▄▀ ▄██▄▄▄▄█▄▀▄▀██▀▄█▀█▄ █▀█▀█▄▀▄███ ▀█▄█▀▀█ ▀█
+██ ▀ ▄█▄█  ▀▄▄ █▀▄▀▀▀█▀█▀ █▄▄ █▀  ▀   ▄ █▀▄ ▄██
+█▄▄▄▄ ▄▄▄ ████ █▄▄  ▀ ▄▄▄ ▀█▄█▀ ▀▀▄█  ▄▄▄ ▀▀▀▀█
+█ █▀▀ █▄█ █▀▀██  ██ ▀ █▄█ █   ▀█▄ █▄▄ █▄█   ▄▀█
+█ ▀█ ▄ ▄▄ █▀▄ ▄█▄▄▄ █ ▄ ▄▄ ▄▀▀ ▀ █▄▄█▄▄  ▄ ▄█▄█
+██▄▀█▀█▄▀▀ ▀▄  █ █  ██▀█▀▀▀▄▄▀▄██▀▄▄ ▄▄███▀  ██
+█ ██ ▀▄▄█  █▀ ▀▀█▄ ▄▀ █▀ ▀ █▄▀▄  ▀█▄▀▄ ▀█▄▄▀███
+████ ▄█▄▄▄▄ █▀▀█ ▀▀██▄▄▀ ▀▄█▄▀▄▀▀█▄▀▀▄▀▀  ▀ ▄▀█
+█▀▀▀▄ ▀▄▄▄▀ ▀▄▀▀██ ▄▀▄▀▀▀▀ ▄ ▀▀▀▄▀▀█▀▀█ ██    █
+██▀▀▀ █▄█  ▀▀█ █▀█  █▄  ▄▀▄██▀▀  ▀▄▄▀▄ ███  ███
+█▄██▄▄█▄▄▀▀ ▀▀▀▀▄█▀▄  ▄▄▄ ▀█▀█ ▀▄███▀ ▄▄▄ █▀█▄█
+█ ▄▄▄▄▄ █▄▄█▀▄ ▄ ▀▀▀  █▄█ ▄ ▄ █▄ ▀▄▀▄ █▄█  ▀▄▀█
+█ █   █ █ ▀▀█ ▀▀▄▄ ▄▀▄▄▄  ▀▄ ▀▀▀ ██▄▄  ▄  ▀▀▀██
+█ █▄▄▄█ █  ▀ ▄█▀▀▀█▀ ▀   ▄ ▄▀███ ▀▀ ▄  █▀█  █▄█
+█▄▄▄▄▄▄▄█▄████▄██▄█▄▄█▄█▄▄▄▄███▄▄██▄███▄▄▄█▄▄██
+
+```
 
 ## Prerequisite
 
