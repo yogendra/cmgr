@@ -25,10 +25,11 @@ On you **Mobile Device (Phone/Tablet)**
 
 - Go to **Whatsapp > Setting > WhatsApp Web**
 - Click on **LINK A DEVICE**
-- And then scan the QR code shown on screen.
+- And then scan the QR code shown your screen.
 
 This will connect this app to your whatsapp account
 
+_Example:_
 ```bash
 2021-05-15 17:11:29.654 [info] : Folder:./campaign - Campaign Start 
 2021-05-15 17:11:29.665 [info] : Finished loading  1 contacts from campaign/contacts.csv 
