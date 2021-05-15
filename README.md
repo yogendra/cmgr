@@ -1,6 +1,16 @@
 # Campaign Manager (cmgr)
 
-A simple utility to send message on whatsapp.
+A simple utility to send message on whatsapp. This is a command line tool so you have to run this in a Windows Termical on windows, or equivalen on Mac and linux.
+
+## Quick start
+
+Ones you have the pre-requisites set, just run following on terminal
+
+```bash
+npx github:yogendra/cmgr
+```
+
+Ones you have setup [pre-requisites](#prerequisites).
 
 ## Prerequisite
 
@@ -8,12 +18,19 @@ A simple utility to send message on whatsapp.
     - Download the package and execute installer
 1. [Windows Terminal](https://www.microsoft.com/en-sg/p/windows-terminal/9n0dx20hk701?rtc=1&activetab=pivot:overviewtab) **Windows Only**
     - Download package and execute installer
-
-
+1. A campaign folder, [more info below](#campaign-folder)
 
 ## How to use it?
 
-1. Create a [campaign folder](#campaign-folder). Example: `campaign`
+1. Create a [campaign folder](#campaign-folder). Example: `campaign`. For a quick start, run following command
+
+    - Use a quick start commands to create sample campaign.
+
+        ```bash
+        npx -p github:yogendra/cmgr init-campaign
+        ```
+
+        This will create a new folder/directory named `campaign` in you current directory. You can edit `contacts.csv` or replace it with your own.
     - **TIP:** On windows, you may put it on desktop for easily running program
     - If its not on desktop that you have to provide full path of the folder
 1. Start your terminal applications
@@ -43,6 +60,7 @@ A simple utility to send message on whatsapp.
     ```
 
 1. Run campaign
+
     ```bash
     npx -p github:yogendra/cmgr campaign
     ```
