@@ -13,7 +13,7 @@
       ],
       "program": "${workspaceFolder}/bin/cmgr.js",
       "args": [
-          "example/campaign"
+          "${workspaceFolder}/example/campaign"
       ]
 
     },
@@ -26,7 +26,7 @@
         ],
         "program": "${workspaceFolder}/bin/cmgr.js",
         "args": [
-            "test/data/test-campaign"
+            "${workspaceFolder}/test/data/test-campaign"
         ]
   
       }
