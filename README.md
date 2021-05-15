@@ -4,20 +4,18 @@ A simple utility to send message on whatsapp. This is a command line tool so you
 
 ## Quick start
 
-Ones you have the pre-requisites set, just run following on terminal
+Ones you have setup [pre-requisites](#prerequisites),  just run following on terminal
 
 ```bash
 npx github:yogendra/cmgr
 ```
-
-Ones you have setup [pre-requisites](#prerequisites).
-
+You will be asked for 
 ## Prerequisite
 
 1. Install [NodeJS 16.1+](https://nodejs.org/en/download/)
     - Download the package and execute installer
 1. [Windows Terminal](https://www.microsoft.com/en-sg/p/windows-terminal/9n0dx20hk701?rtc=1&activetab=pivot:overviewtab) **Windows Only**
-    - Download package and execute installer
+    - Install from Market or Download package and execute installer
 1. A campaign folder, [more info below](#campaign-folder)
 
 ## How to use it?
@@ -62,7 +60,7 @@ Ones you have setup [pre-requisites](#prerequisites).
 1. Run campaign
 
     ```bash
-    npx -p github:yogendra/cmgr campaign
+    npx github:yogendra/cmgr
     ```
 
 ## Campaign Folder
