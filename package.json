@@ -7,16 +7,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js example/campaign"
-
   },
-  "bin":{
-      "cmgr": "./bin/cmgr.js",
-      "init": "./bin/init.js"
+  "bin": {
+    "cmgr": "./bin/cmgr.js",
+    "init-campaign": "./bin/init-campaign.js"
   },
   "files": [
-      "bin/**",
-      "lib/**",
-      "index.js"
+    "bin/**",
+    "lib/**",
+    "index.js",
+    "example/campaign/**"
   ],
   "repository": "github:yogendra/cmgr",
   "keywords": [],
@@ -24,7 +24,9 @@
   "license": "ISC",
   "dependencies": {
     "csv-parser": "^3.0.0",
+    "ncp": "^2.0.0",
     "qrcode-terminal": "^0.12.0",
-    "whatsapp-web.js": "^1.12.6"
+    "whatsapp-web.js": "^1.12.6",
+    "winston": "^3.3.3"
   }
 }
