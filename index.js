@@ -10,29 +10,47 @@ import pkg from "whatsapp-web.js";
 const { MessageMedia } = pkg;
 import { waclient } from "./lib/waclient.js";
 import { join } from "path";
+import logger from "./lib/logger.js";
 
 /**
- * Runs a campaign from the given folder. Expects a contact.csv file and messages folder in it
+ * A contact
+ * @typedef {Object} Contact
+ * @property {string} phone - Phone number os contact
+ * @property {string} name - Name of contact
+ * @property {string} nickname - Nick name of cotact
+ */
+/**
+ * A message
+ * @typedef {Object} Message
+ * @property {string} text - Text message to send
+ * @property {string} path - Path of the file of type text, image and video
+ * @property {string} caption - Caption for media files (image and video)
+ */
+
+
+/**
+ * Runs a campaign from the given folder. Expects a contact.csv file and 
+ * messages folder in it
  * @param {string} folder Folder path. It can be relative or absoluted path
  */
 export function runFolder(folder) {
-  console.debug("Run Folder: %s", folder);
+  logger.info("Run Campaign from Folder: %s", folder);
   if (isValidCampaignFolder(folder)) {    
     Promise.all([      
-      readContacts(folder + "/contacts.csv"),
-      readMessagesFromFolder(folder + "/messages/"),
-    ]).then(([contacts, messages]) => {
+      readContacts(join(folder + "contacts.csv")),
+      readMessagesFromFolder(join(folder, "messages")),
+    ]).then(([contacts, messages]) => {      
       run(contacts, messages);
     });
   }else{
-    console.error(`${folder}: invalid folder`);
+    logger.error(`${folder}: invalid folder`);
   }
 }
 
 /**
- *
- * @param {Array<*>} contacts
- * @param {Array<*} messages
+ * Send given messages to all contacts 
+ * @param {Contact[]} contacts
+ * @param {Message[]} messages
  */
 export async function run(contacts, messages) {
   for (let i = 0; i < contacts.length; i++) {
@@ -51,44 +69,44 @@ function sleep(ms) {
   });
 }  
 /**
- *
- * @param {*} contact
- * @param {Array<*>} messages
+ * Run campaign for a single contact
+ * @param {Contact} contact - Contact object
+ * @param {Message[]} messages - List of messages
  */
 export async function runForContact(contact, messages) {
   try {
     let wwa = await waclient();
-    console.debug("contact: %s - processing", contact.phone);
+    logger.debug("contact: %s - processing", contact.phone);
     let isRegistered = await wwa.isRegisteredUser(contact.phone);
     if (!isRegistered) {
+      logger.error("%s: not registered", contact.phone);
       return;
     }
 
     for (let i = 0; i < messages.length; i++) {
-      console.debug(
+      let message = messages[i];
+      logger.debug(
         "contact: %s - posting message (%s)",
         contact.phone,
-        messages[i].path
+        message.text || message.path
       );
       await postMessage(wwa, contact, messages[i]);
     }
   } catch (e) {
-    console.error(e);
+    logger.error(e);
     return;
   }
 }
 /**
- *
- *
  * @param {import("whatsapp-web.js").Client} waclient
- * @param {*} contact
- * @param {*} message
+ * @param {Contact} contact - Contact object
+ * @param {Message} messages - Message object
  * @returns {*}
  */
 async function postMessage(waclient, contact, message) {
   let sentMessage = null;
   if (isMediaMessage(message)) {
-    console.debug("MEDIA chat: %s, message: %s", contact.phone, message);
+    logger.debug("MEDIA chat: %s, message: %s", contact.phone, message);
     let mediaMessage = MessageMedia.fromFilePath(message.path);
     let messageOptions = { caption: message.caption };
     sentMessage = await waclient.sendMessage(
@@ -97,12 +115,13 @@ async function postMessage(waclient, contact, message) {
       messageOptions
     );
   } else if (isTextMessage(message)) {
-    console.debug("TEXT chat: %s, message: %s", contact.phone, message);
+    logger.debug("TEXT chat: %s, message: %s", contact.phone, message);
     let content = message.text || readFileSync(message.path, "utf8");
     sentMessage = await waclient.sendMessage(contact.phone, content);
   } else {
-    console.error("unknown message type");
+    logger.error("unknown message type");
   }
+  logger.debug("%s: send message %s", contact.phone, sentMessage.id._serialized);
 }
 
 function isMediaMessage(message) {
@@ -115,16 +134,37 @@ function isTextMessage(message) {
 }
 function isValidCampaignFolder(folder) {
   let valid = existsSync(folder);
+  if (!valid){
+    logger.error("%s: does not exists", folder);
+    return valid;
+  }
   valid = valid && lstatSync(folder).isDirectory();
-  valid = valid && existsSync(folder + "/contacts.csv");
-  valid = valid && existsSync(folder + "/messages");
-  valid = valid && lstatSync(folder + "/messages").isDirectory();
+  if (!valid){
+    logger.error("%s: not a directory", folder);
+    return valid;
+  }
+  valid = valid && existsSync( join( folder ,  "contacts.csv"));
+  if (!valid){
+    logger.error("%s: does not have contacts files", folder);
+    return valid;
+  }
+  valid = valid && existsSync(join(folder, "messages"));
+  if (!valid){
+    logger.error("%s: messages does not exists", folder);
+    return valid;
+  }
+  valid = valid && lstatSync(join(folder, "messages")).isDirectory();
+  if (!valid){
+    logger.error("%s: messages is not a directory", folder);
+    return valid;
+  }
   return valid;
 }
+
 /**
- *
+ * Read contacts from a csv file
  * @param {string} csvFile
- * @returns {Promise<Array<*>>}
+ * @returns {Promise<Contact[]>} - Promise that return an array of contacts
  */
 function readContacts(csvFile) {
   return new Promise((resolve, reject) => {
@@ -140,40 +180,34 @@ function readContacts(csvFile) {
         }
       })
       .on("end", () => {
-        console.debug("Finished reading contacts");
+        logger.info("Finished loading  %s contacts from %s", contacts.length, csvFile);
         resolve(contacts);
       });
   });
 }
 function cleanupContact(contact) {
-  return {
-    phone: cleanPhoneNumber(contact.phone),
-    name: contact.name,
-    nickname: contact.nickname,
-  };
+  contact.phone=cleanPhoneNumber(contact.phone);
+  return contact;
 }
 /**
  *
  * @param {string} phoneNumber
  */
 function cleanPhoneNumber(phoneNumber) {
-  let n = phoneNumber
-    .replace(/^\+/, "") // remove leading '+'
-    .replace(/@c\.us$/, "") // remove trailing '@c.us'
-    .replace(/\s+/g, "") // remove spaces
-    .replaceAll(/\D+/g, "")
-    .concat("@c.us"); // remove non-digits
+  let n = phoneNumber    
+    .replaceAll(/\s+/g, "") // remove spaces
+    .replaceAll(/\D+/g, "");
 }
 /**
  *
  * @param {string} csvFile
- * @returns {Promise<Array<*>>}
+ * @returns {Promise<Message[]>} - Promise resolving with an array of messages.
  */
 function readMessagesFromFolder(messagesFolder) {
   return new Promise((resolve, reject) => {
     readdir(messagesFolder, (err, files) => {
       if (err) {
-        console.debug(err);
+        logger.error(err);
         reject(err);
         return;
       } else {
