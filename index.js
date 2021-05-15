@@ -33,15 +33,14 @@ import logger from "./lib/logger.js";
  * @param {string} folder Folder path. It can be relative or absoluted path
  */
 export function runFolder(folder) {
-  logger.info("Folder:%s - Start", folder);
+  logger.info("Folder:%s - Campaign Start", folder);
   if (isValidCampaignFolder(folder)) {
     Promise.all([
       readContacts(join(folder, "contacts.csv")),
       readMessagesFromFolder(join(folder, "messages")),
-    ]).then(([contacts, messages]) => {
-      await run(contacts, messages);
-      console.info("Finished Campaign from Forlder: ")
-      logger.info("Folder:%s - End", folder);
+    ]).then(async ([contacts, messages]) => {
+      await run(contacts, messages);    
+      logger.info("Folder:%s - Campaign End", folder);
     }).catch((err)=>{
       logger.error(err);
     });
