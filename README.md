@@ -62,6 +62,7 @@ _Example:_
 ## Prerequisites
 
 1. Install [NodeJS 16.1+](https://nodejs.org/en/download/)
+    - Direct links [win](https://nodejs.org/dist/v16.1.0/node-v16.1.0-x64.msi) [mac](https://nodejs.org/dist/v16.1.0/node-v16.1.0.pkg)
     - Download the package and execute installer
 1. [Windows Terminal](https://www.microsoft.com/en-sg/p/windows-terminal/9n0dx20hk701?rtc=1&activetab=pivot:overviewtab) **Windows Only**
     - Install from Market or Download package and execute installer
