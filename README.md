@@ -62,25 +62,13 @@ _Example:_
 ## Prerequisites
 
 1. Install [NodeJS 16.1+](https://nodejs.org/en/download/)
-    - Direct links [win](https://nodejs.org/dist/v16.1.0/node-v16.1.0-x64.msi) [mac](https://nodejs.org/dist/v16.1.0/node-v16.1.0.pkg)
-    - Download the package and execute installer
+    - Detailed insttruction are [here](docs/nodejs-install)
 1. [Windows Terminal](https://www.microsoft.com/en-sg/p/windows-terminal/9n0dx20hk701?rtc=1&activetab=pivot:overviewtab) **Windows Only**
     - Install from Market or Download package and execute installer
 1. A campaign folder, [more info below](#campaign-folder)
 
 ## How to use it?
 
-1. Create a [campaign folder](#campaign-folder). Example: `campaign`. For a quick start, run following command
-
-    - Use a quick start commands to create sample campaign.
-
-        ```bash
-        npx -p github:yogendra/cmgr init-campaign
-        ```
-
-        This will create a new folder/directory named `campaign` in you current directory. You can edit `contacts.csv` or replace it with your own.
-    - **TIP:** On windows, you may put it on desktop for easily running program
-    - If its not on desktop that you have to provide full path of the folder
 1. Start your terminal applications
 
 1. Check NodeJS
@@ -107,6 +95,17 @@ _Example:_
     7.11.2
     ```
 
+1. Create a [campaign folder](#campaign-folder). Example: `campaign`. For a quick start, run following command
+
+    - Use a quick start commands to create sample campaign.
+
+        ```bash
+        npx -p github:yogendra/cmgr init-campaign
+        ```
+
+        This will create a new folder/directory named `campaign` in you current directory. You can edit `contacts.csv` or replace it with your own.
+    - **TIP:** On windows, you may put it on desktop for easily running program
+    - If its not on desktop then you have to provide full path of the folder
 1. Run campaign
 
     ```bash
