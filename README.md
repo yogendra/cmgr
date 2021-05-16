@@ -61,39 +61,13 @@ _Example:_
 
 ## Prerequisites
 
-1. Install [NodeJS 16.1+](https://nodejs.org/en/download/)
-    - Detailed insttruction are [here](docs/nodejs-install.md)
-1. [Windows Terminal](https://www.microsoft.com/en-sg/p/windows-terminal/9n0dx20hk701?rtc=1&activetab=pivot:overviewtab) **Windows Only**
-    - Install from Market or Download package and execute installer
+1. NodeJS and Git. Detailed install insttruction are [here](docs/nodejs-install.md)
 1. A campaign folder, [more info below](#campaign-folder)
 
 ## How to use it?
 
-1. Start your terminal applications
-
-1. Check NodeJS
-
-    ```bash
-    node -v
-    ```
-
-    **Output:**
-
-    ```bash
-    v16.1.0
-    ```
-
-1. Check NPX
-
-    ```bash
-    npx -v
-    ```
-
-    **Output:**
-
-    ```bash
-    7.11.2
-    ```
+1. Ensure [Pre-requistes](#prerequisites) are setup
+1. Start your terminal/command prompt application
 
 1. Create a [campaign folder](#campaign-folder). Example: `campaign`. For a quick start, run following command
 
