@@ -62,7 +62,7 @@ _Example:_
 ## Prerequisites
 
 1. Install [NodeJS 16.1+](https://nodejs.org/en/download/)
-    - Detailed insttruction are [here](docs/nodejs-install)
+    - Detailed insttruction are [here](docs/nodejs-install.md)
 1. [Windows Terminal](https://www.microsoft.com/en-sg/p/windows-terminal/9n0dx20hk701?rtc=1&activetab=pivot:overviewtab) **Windows Only**
     - Install from Market or Download package and execute installer
 1. A campaign folder, [more info below](#campaign-folder)
