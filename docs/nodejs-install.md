@@ -19,9 +19,51 @@ NodeJs is free open-source javascript runtime. It can be downloaded from its [of
     - Features selected by default are sufficient. Click **Next**
         ![Feature Selection](images/nodejs-install-features.png)
     - On Native Modules screen, **Select** Automatically install the neccessary tools and click **Next**
-        ![native tools](images/nodejs-install-native-tools.png)
+        ![Tools for Native Modules](images/nodejs-install-native-tools.png)
     - Ready to install. Click **Next**. You may get a Windows confirmation screen to allow application to escalate privilages. Approve that
-        ![ready to install](images/nodejs-install-ready.png)
+        ![Ready to Install](images/nodejs-install-ready.png)
+    - Wizard will go through few steps automatically
+    - There will be a command prompt for tool installation. Press any key to allow it to install
+        ![Native Module Install Script](images/node-install-native-module-script.png)
+    - Thi will open a new PowerShell windows which installs multiple tools. It may take upto 30 min to complete.
+        ![PowerShell to Install Runtimes](images/node-install-powershell.png)
+    - After some time you will see following. Press ENTER to exit
+    ![Powershell Finish](images/node-install-poweshell-end.png)
+
+1. Setup git
+    - Lauch a terminal (Command Prompt will do)
+    - Run following command
+        
+        ```bash
+        choco install git
+        ```
+
+    - Program will ask for confirmation for running script. Type `A` and press enter.
+        ![Git Install Confirmation](images/git-install-confirm.png)
+    - Once setup is finished, refresh environemnt
+        
+        ```bash
+        refreshenv
+        ```
+
+1. Check everything is setup correctly. Type following commands to check all the tools.
+    - Node
+
+        ```bash
+        node -v
+        ```
+
+    - NPX
+
+        ```bash
+        npx -v
+        ```
+
+    - Git
+
+        ```bash
+        git -v
+        ```
 
 ## MacOS
 
