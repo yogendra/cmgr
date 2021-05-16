@@ -59,7 +59,7 @@ _Example:_
 
 ```
 
-## Prerequisite
+## Prerequisites
 
 1. Install [NodeJS 16.1+](https://nodejs.org/en/download/)
     - Download the package and execute installer
