@@ -11,6 +11,7 @@ const { MessageMedia } = pkg;
 import { waclient } from "./lib/waclient.js";
 import { join } from "path";
 import logger from "./lib/logger.js";
+import sleep from "./lib/sleep.js";
 
 /**
  * A contact
@@ -26,66 +27,106 @@ import logger from "./lib/logger.js";
  * @property {string} path - Path of the file of type text, image and video
  * @property {string} caption - Caption for media files (image and video)
  */
+/**
+ * A message sent report
+ * @typedef {Object} MessageReport
+ * @property {string} phone - phone number
+ * @property {string} chat_id - sent chat id
+ * @property {sring} sent_id - sent message id
+ * @property {string|Object} error - Error details
+ */
 
 /**
  * Runs a campaign from the given folder. Expects a contact.csv file and
  * messages folder in it
  * @param {string} folder Folder path. It can be relative or absoluted path
  */
-export function runFolder(folder) {
+
+/** @type {import("whatsapp-web.js").Client} */
+
+/**
+ *
+ * @param {string} folder - Run the campaign folder
+ * @returns {Promise<MessageReport>} Array of promise of message reports
+ */
+export async function runFolder(folder) {
+  let messageReports = null;
   logger.info("Folder:%s - Campaign Start", folder);
   if (isValidCampaignFolder(folder)) {
-    Promise.all([
-      readContacts(join(folder, "contacts.csv")),
-      readMessagesFromFolder(join(folder, "messages")),
-    ]).then(async ([contacts, messages]) => {
-      await run(contacts, messages);    
-      logger.info("Folder:%s - Campaign End", folder);
-    }).catch((err)=>{
-      logger.error(err);
-    });
+    let contacts = await readContacts(join(folder, "contacts.csv"));
+    let messages = await readMessagesFromFolder(join(folder, "messages"));
+    logger.debug("before run");
+    messageReports = await run(contacts, messages);
+    logger.debug("after run");
   } else {
     logger.error(`${folder}: invalid folder`);
+    throw new Error(`${folder}: invalid folder`);
   }
+  return messageReports;
 }
 
 /**
  * Send given messages to all contacts
  * @param {Contact[]} contacts
  * @param {Message[]} messages
+ * @return {Promise<MessageReport>[]} sent message handle
  */
 export async function run(contacts, messages) {
+  logger.debug("in run");
+  logger.info("Start processing contacts and messages");
+  let messageReports = await doRun(contacts, messages);
+  logger.info("Finished processing contacts and messages");
+  return messageReports;
+}
+/**
+ * Send given messages to all contacts
+ * @param {Contact[]} contacts
+ * @param {Message[]} messages
+ * @return {Promise<MessageReport>[]} sent message handle
+ */
+export async function doRun(contacts, messages) {
+  /**@type {Promise<MessageReport>[]} */
+  let sentMessages = [];
+  logger.debug("in doRun");
   for (let i = 0; i < contacts.length; i++) {
-    await runForContact(contacts[i], messages);
+    let contact = contacts[i];
+    logger.debug("%s: doRun - processing", contact.phone);
+    let contactMessageReport = await runForContact(contact, messages);
+    logger.debug("%s: doRun - processed", contact.phone);
+    sentMessages.concat(contactMessageReport);
     if (i % 5 == 0) {
-      await sleep(0.5);
+      logger.debug("Sleeping for 2 seconds");
+      await sleep(2000);
     }
   }
-  await sleep(2);  
-  (await waclient()).destroy();
+  logger.info("Finished queuing all messages");
+  return sentMessages;
 }
 
-function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
 /**
  * Run campaign for a single contact
  * @param {Contact} contact - Contact object
- * @param {Message[]} messages - List of messages
+ * @param {Message[]} message - Messages to send
+ * @return {Promise<MessageReport>[]} messages - List of messages
  */
 export async function runForContact(contact, messages) {
+  let sentMessages = [];
   try {
-    let wwa = await waclient();
     logger.debug("contact: %s - processing", contact.phone);
-    let id = /.*@c.us$/.test(contact.phone) ? contact.phone: `${contact.phone}@c.us`;
-    let isRegistered = await wwa.isRegisteredUser(id);
+    let client = await waclient();
+    logger.debug("runForContact got client");
+    let id = `${contact.phone}@c.us`;
+    let isRegistered = await client.isRegisteredUser(id);
+    logger.info(
+      "phone: %s, id: %s, registered: %s",
+      contact.phone,
+      id,
+      isRegistered
+    );
     if (!isRegistered) {
-      logger.error("%s: %s not registered", contact.phone, id);
-      return;
+      logger.warn("%s: %s not registered", contact.phone, id);
+      return sentMessages;
     }
-
     for (let i = 0; i < messages.length; i++) {
       let message = messages[i];
       logger.debug(
@@ -94,49 +135,50 @@ export async function runForContact(contact, messages) {
         id,
         message.text || message.path
       );
-      let sentMessage = await postMessage(wwa, id, messages[i]);
-      logger.info(
-        "chat:%s sent_message_id: %s sent",
-        id,
-        sentMessage.id._serialized
-      );      
+      let sentMessage = await postMessage(id, messages[i]);
+
+      logger.info("chat:%s sent_message_id:%s sent", id, sentMessage.sent_id);      
+      sentMessages.push(sentMessage);
     }
-    logger.debug(
-      "contact: %s - completed",
-      contact.phone
-    );
-    return Promise.resolve(1);
+    logger.debug("contact: %s - completed", contact.phone);
+    return sentMessages;
   } catch (e) {
-    logger.error(e);
-    return Promise.reject(e);
+    logger.warning("contact: %s - error running (%s)", contact.phone, e);
+    return sentMessages;    
   }
 }
 /**
- * @param {import("whatsapp-web.js").Client} waclient
  * @param {string} id - contact id, ending with @c.us
  * @param {Message} messages - Message object
- * @returns {Promise<Message>} Returned message
+ * @returns {Promise<MessageReport>} Returned message
  */
-async function postMessage(waclient, id, message) {
+async function postMessage(id, message) {
+  /** @type {MessageReport}  */
   let sentMessage = null;
+  let messageReport = {
+    chat_id: id,
+  };
+  let client = await waclient();
   if (isMediaMessage(message)) {
     logger.debug("chat: %s, type: MEDIA, message: %s", id, message);
     let mediaMessage = MessageMedia.fromFilePath(message.path);
     let messageOptions = { caption: message.caption };
-    sentMessage = await waclient.sendMessage(
-      id,
-      mediaMessage,
-      messageOptions
-    );
+    sentMessage = await client.sendMessage(id, mediaMessage, messageOptions);
   } else if (isTextMessage(message)) {
+    logger.debug(
+      "chat:%s type:TEXT message: %s",
+      id,
+      message.text || message.path
+    );
     let content = message.text || readFileSync(message.path, "utf8");
-    logger.debug("chat:%s type:TEXT message: %s", id, message.text||message.path);
-    sentMessage = await waclient.sendMessage(id, content);
+
+    sentMessage = await client.sendMessage(id, content);
   } else {
-    logger.error("unknown message type");
+    logger.warning("unknown message type");
+    messageReport.error = "Unknonw message type";
   }
-  
-  return Promise.resolve(sentMessage);
+  messageReport.sent_id = sentMessage.id._serialized;
+  return messageReport;
 }
 
 function isMediaMessage(message) {
