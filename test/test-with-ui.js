@@ -7,9 +7,7 @@ var config = {
 }
 let client = await waclient(config)
 
+let isRegistered = await client.isRegisteredUser("6598194650@c.us");
+let message = await client.sendMessage("6598194650@c.us", "test");
 
-client.sendMessage("6598194650@c.us", "test").then((msg)=>{
-  console.log("sent");
-  
-})
-
+console.log(message);
