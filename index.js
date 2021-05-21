@@ -60,7 +60,8 @@ export async function run(contacts, messages) {
     if (i % 5 == 0) {
       await sleep(0.5);
     }
-  }  
+  }
+  await sleep(2);  
   (await waclient()).destroy();
 }
 
