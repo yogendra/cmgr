@@ -58,7 +58,7 @@ export async function run(contacts, messages) {
   for (let i = 0; i < contacts.length; i++) {
     await runForContact(contacts[i], messages);
     if (i % 5 == 0) {
-      sleep(0.5);
+      await sleep(0.5);
     }
   }  
   (await waclient()).destroy();
@@ -93,18 +93,28 @@ export async function runForContact(contact, messages) {
         id,
         message.text || message.path
       );
-      await postMessage(wwa, id, messages[i]);
+      let sentMessage = await postMessage(wwa, id, messages[i]);
+      logger.info(
+        "chat:%s sent_message_id: %s sent",
+        id,
+        sentMessage.id._serialized
+      );      
     }
+    logger.debug(
+      "contact: %s - completed",
+      contact.phone
+    );
+    return Promise.resolve(1);
   } catch (e) {
     logger.error(e);
-    return;
+    return Promise.reject(e);
   }
 }
 /**
  * @param {import("whatsapp-web.js").Client} waclient
  * @param {string} id - contact id, ending with @c.us
  * @param {Message} messages - Message object
- * @returns {*}
+ * @returns {Promise<Message>} Returned message
  */
 async function postMessage(waclient, id, message) {
   let sentMessage = null;
@@ -124,11 +134,8 @@ async function postMessage(waclient, id, message) {
   } else {
     logger.error("unknown message type");
   }
-  logger.info(
-    "chat:%s sent_message_id: %s sent",
-    id,
-    sentMessage.id._serialized
-  );
+  
+  return Promise.resolve(sentMessage);
 }
 
 function isMediaMessage(message) {
